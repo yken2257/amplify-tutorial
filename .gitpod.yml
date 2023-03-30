@@ -9,3 +9,4 @@ tasks:
       aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
       aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
       aws configure set default.region ap-northeast-1
+      amplify pull -y --appId $(cat amplify/team-provider-info.json | jq '.dev.awscloudformation.AmplifyAppId') --envName dev
