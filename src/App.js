@@ -1,38 +1,57 @@
 import React from 'react';
-import Amplify from 'aws-amplify';
-import { AmplifyAuthenticator, AmplifySignUp, AmplifySignOut } from '@aws-amplify/ui-react';
-import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
+import { Amplify } from 'aws-amplify';
+import '@aws-amplify/ui-react/styles.css';
+import "@cloudscape-design/global-styles/index.css"
 import awsconfig from './aws-exports';
+
+import { Authenticator, View, Text, Heading } from '@aws-amplify/ui-react';
+import NavigationBar from './components/NavigationBar';
+import HomePage from './components/HomePage';
+import { ApiKeyProvider } from './components/ApiKeyProvider';
 
 Amplify.configure(awsconfig);
 
 const App = () => {
-    const [authState, setAuthState] = React.useState();
-    const [user, setUser] = React.useState();
 
-    React.useEffect(() => {
-        return onAuthUIStateChange((nextAuthState, authData) => {
-            setAuthState(nextAuthState);
-            setUser(authData)
-        });
-    }, []);
+  const components = {
+    SignIn: {
+      Header() {
+        return (
+          <Heading
+            level={3}
+            padding="2rem"
+          >
+            Sign in
+          </Heading>
+        )
+      }
+    },
+    Footer() {
+      return (
+        <View textAlign="center">
+          <Text>
+            &copy; All Rights Reserved
+          </Text>
+        </View>
+      );
+    },
+  }
 
-  return authState === AuthState.SignedIn && user ? (
-      <div className="App">
-          <div>Hello, {user.username}</div>
-          <AmplifySignOut />
-      </div>
-    ) : (
-      <AmplifyAuthenticator>
-        <AmplifySignUp
-          slot="sign-up"
-          formFields={[
-            { type: "username" },
-            { type: "password" },
-            { type: "email" }
-          ]}
-        />
-      </AmplifyAuthenticator>
+
+  return (
+    <Authenticator hideSignUp={true} loginMechanisms={['email']} components={components}>
+      {({ signOut, user }) => (
+        <main>
+          <ApiKeyProvider user={user}>
+            <NavigationBar 
+              signOut={signOut} 
+              user={user}
+            />
+            <HomePage user={user}/>
+          </ApiKeyProvider>
+        </main>
+      )}
+    </Authenticator>
   );
 }
 

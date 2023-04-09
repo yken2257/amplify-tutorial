@@ -1,0 +1,6 @@
+type ApiKey @model @auth(rules: [{allow: public}, {allow: private}]) {
+  id: ID!
+  user: String
+  name: String
+  value: String
+}
