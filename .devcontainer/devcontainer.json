@@ -1,0 +1,17 @@
+{
+	"name": "node:18-bullseye-slim",
+  "image": "node:18-bullseye-slim",
+	"postCreateCommand": "apt update && npm install",
+	"features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers-contrib/features/amplify-cli:2": {}
+  },
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"GitHub.copilot"
+			]
+		}
+	}
+}
